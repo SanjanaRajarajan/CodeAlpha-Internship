@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+.row{
+    display: flex;
+}
+.column img {
+  cursor: pointer; 
+  width: 330px;
+  height: 395px;
+  padding-right: 2px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.column img:hover {
+  opacity: 1;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.container {
+  position: fixed; /* Changed to fixed position */
+  z-index: 1;
+  padding-top: 19px;
+  padding-bottom: 1px; /* Adjusted padding */
+  left: 0;
+  top: 0;
+  width: 1350px;
+  height: 900px;
+  overflow: auto;
+  display: none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image:url(https://t4.ftcdn.net/jpg/03/54/61/59/360_F_354615912_hfoftP6zkV43A5hKrJlRrg9RfepCMoZu.jpg);  
+      
+}
+
+.container img {
+  margin: auto;
+  display: block;
+  width: 90%; /* Adjusted image width */
+  max-width: 920px; /* Max width of expanded image */
+  height: auto;
+  image-resolution: from-image;
+image-resolution: 300dpi;
+image-resolution: from-image 300dpi;
+image-resolution: 300dpi snap;
+image-resolution: inherit;
+image-resolution: initial;
+image-resolution: revert;
+image-resolution: revert-layer;
+image-resolution: unset;
+border-style:solid;
+border-color: black;
+border-width: 3px;
+}
+
+.closebtn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: white;
+  font-size: 50px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+#expandedImg{
+    width: 1330px;
+    height: 600px;
+}
+h2{
+    font-size:xx-large;
+    font-weight: bold;
+    font-style: italic;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    
+}
+.main{
+      width: 1333px;
+      height: 125px;  
+      border:blue; 
+      padding: 10px;
+      border-radius: 5px; 
+      margin-left: 1px;
+      margin-bottom: 8px;
+      margin-top: 8px;
+      text-align: center;
+      font-stretch: expanded;
+      font-size: 25px;
+      font-style: italic;
+      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-image:url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTajw1YEVD1rL6Dgkg5D9L0oaebpj6Zb0LE-Q&s);  
+      
+}
+</style>
+</head>
+<body>
+
+<div class="main" >
+  <h1> Image Gallery</h1>
+</div>
+<div class="row">
+  
+  <div  class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img1" onclick="myFunction(this);"></div>
+  <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img2" onclick="myFunction(this);"></div>
+  <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img3" onclick="myFunction(this);"></div>
+  <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img4" onclick="myFunction(this);"></div>
+</div>
+<div class="row">
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img5" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img6" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img7" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img8" onclick="myFunction(this);"></div>
+</div>
+<div class="row">
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img9" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img10" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img11" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img12" onclick="myFunction(this);"></div>
+</div>
+<div class="row">
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img13" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img14" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img15" onclick="myFunction(this);"></div>
+    <div class="column"><img class="img" src="C:\Users\sana0\Pictures\codealpha_img\img16" onclick="myFunction(this);"></div>
+</div>
+<div class="container">
+  <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+  <img id="expandedImg"  >
+</div>
+<script>
+function myFunction(imgs) {
+  var expandImg = document.getElementById("expandedImg");
+  expandImg.src = imgs.src;
+  expandImg.parentElement.style.display = "block";
+}
+
+
+</script>
+
+</body>
+</html>
