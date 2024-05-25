@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crazyy Cubes</title>
+  <style>
+    body{
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-image:url(https://img.freepik.com/free-vector/gradient-hexagonal-background_23-2148954968.jpg);
+      
+    }
+    p{
+      font-style: italic;
+      font-size: 120px;
+      font-weight: 900;
+      color: rgb(255, 255, 255);
+      text-align: center;
+      padding-top: 70px;
+      padding-bottom: 2px;
+      text-shadow: 12px 8px 12px rgb(4, 40, 248);
+    }
+    .play{
+      margin-left: 620px;
+      padding: 9px 30px 3px 30px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 900;
+      font-style: italic;
+      text-decoration: none;
+      font-family: Chiller;
+      font-size: 60px;
+      background-color: rgba(0, 0, 255, 0.859);
+      color: whitesmoke;
+      text-shadow: 2px 1px 2px white ;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <audio id="background-music" loop>
+    <source src="C:\Users\sana0\Desktop\webgame\Run-Amok(chosic (mp3cut.net).mp3" type="audio/mpeg">.
+  </audio>
+  <p>CRAZYY CUBES</p>
+  <a href="file:///C:/Users/sana0/Desktop/webgame/index.html" class="play">PLAY</a>
+  <script type="text/javascript">
+    const backgroundMusic = document.getElementById('background-music');
+    const startMusic = () => {
+      backgroundMusic.play();
+      document.removeEventListener('click', startMusic);
+    };
+    document.addEventListener('click', startMusic);
+  </script>
+</body>
+</html>
