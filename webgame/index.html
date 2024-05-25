@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .restart{
+      padding: 9px 30px 3px 30px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 900;
+      font-style: italic;
+      text-decoration: none;
+      font-size: 60px;
+      color: white;
+      cursor:pointer;
+      background-color: black;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      position: absolute;
+    }
+    body {
+      margin: 0;
+      background: #0c4a6e;
+      overflow: hidden;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-image:url(C:/Users/sana0/Desktop/webgame/cube_bg.jpg);
+    }
+    #you-lose {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      font-size: 40px;
+      color: red;
+      display: none;
+      opacity: 0;
+      color: white;
+      font-weight: 800;
+      font-style: italic;
+
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    }
+    #you-lose.show {
+      display: block;
+      opacity: 1;
+      font-size: 110px;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  </style>
+  <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <audio id="background-music" loop>
+    <source src="C:\Users\sana0\Desktop\webgame\Run-Amok(chosic (mp3cut.net).mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div id="you-lose">You lose</div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true
+    });
+    renderer.shadowMap.enabled = true;
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    class Box extends THREE.Mesh {
+      constructor({width, height, depth, color = '#00ff00', velocity = {x: 0, y: 0, z: 0}, position = {x: 0, y: 0, z: 25}, zAcceleration = false}) {
+        super(
+          new THREE.BoxGeometry(width, height, depth), 
+          new THREE.MeshStandardMaterial({ color })
+        );
+        this.height = height;
+        this.width = width;
+        this.depth = depth;
+        this.position.set(position.x, position.y, position.z);
+        this.velocity = velocity;
+        this.gravity = -0.003;
+        this.updateSides();
+        this.zAcceleration = zAcceleration;
+      }
+
+      updateSides() {
+        this.bottom = this.position.y - this.height / 2;
+        this.top = this.position.y + this.height / 2;
+        this.right = this.position.x + this.width / 2;
+        this.left = this.position.x - this.width / 2;
+        this.front = this.position.z + this.depth / 2;
+        this.back = this.position.z - this.depth / 2;
+      }
+
+      update(ground) {
+        this.updateSides();
+        if (this.zAcceleration) this.velocity.z += 0.01;
+        this.position.x += this.velocity.x;
+        this.position.z += this.velocity.z;
+        this.applyGravity(ground);
+      }
+
+      applyGravity(ground) {
+        this.velocity.y += this.gravity;
+
+        if (boxCollision({ box1: this, box2: ground })) {
+          const friction = 0.5;
+          this.velocity.y *= friction;
+          this.velocity.y = -this.velocity.y;
+        } else {
+          this.position.y += this.velocity.y;
+        }
+      }
+    }
+
+    function boxCollision({ box1, box2 }) {
+      const xCollision = box1.right >= box2.left && box1.left <= box2.right;
+      const yCollision = box1.bottom + box1.velocity.y <= box2.top && box1.top >= box2.bottom;
+      const zCollision = box1.front >= box2.back && box1.back <= box2.front;
+      return xCollision && yCollision && zCollision;
+    }
+
+    const cube = new Box({ width: 4, height: 3, depth: 2, velocity: { x: 0, y: 0, z: 0 }, position: { x: 0, y: 0, z: 25 } });
+    cube.castShadow = true;
+    scene.add(cube);
+
+    const ground = new Box({ width: 40, height: 1, depth: 90, color: 'red', position: { x: 0, y: -2, z: 0 } });
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.z = 1;
+    light.position.y = 3;
+    light.castShadow = true;
+    scene.add(light);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+    camera.position.set(3, 9, 40);
+
+    const keys = {
+      l: { pressed: false },
+      r: { pressed: false },
+      f: { pressed: false },
+      b: { pressed: false }
+    };
+
+    window.addEventListener('keydown', (event) => {
+      switch (event.code) {
+        case 'KeyL':
+          keys.l.pressed = true;
+          break;
+        case 'KeyR':
+          keys.r.pressed = true;
+          break;
+        case 'KeyF':
+          keys.f.pressed = true;
+          break;
+        case 'KeyB':
+          keys.b.pressed = true;
+          break;
+      }
+    });
+
+    window.addEventListener('keyup', (event) => {
+      switch (event.code) {
+        case 'KeyL':
+          keys.l.pressed = false;
+          break;
+        case 'KeyR':
+          keys.r.pressed = false;
+          break;
+        case 'KeyF':
+          keys.f.pressed = false;
+          break;
+        case 'KeyB':
+          keys.b.pressed = false;
+          break;
+        case 'Space':
+          cube.velocity.y = 0.1;
+          break;
+      }
+    });
+
+    const enemies = [];
+    let frames = 0;
+    let gameOver = false;
+
+    function animate() {
+      if (gameOver) return;
+
+      const animationId = requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+      cube.velocity.x = 0;
+      cube.velocity.z = 0;
+
+      if (keys.l.pressed) {
+        cube.velocity.x = -0.09;
+      } else if (keys.r.pressed) {
+        cube.velocity.x = 0.09;
+      }
+      if (keys.f.pressed) {
+        cube.velocity.z = -0.09;
+      } else if (keys.b.pressed) {
+        cube.velocity.z = 0.09;
+      }
+
+      cube.update(ground);
+      enemies.forEach(enemy => {
+        enemy.update(ground);
+        if (boxCollision({ box1: cube, box2: enemy })) {
+          cancelAnimationFrame(animationId);
+          gameOver = true;
+          document.getElementById('you-lose').classList.add('show');
+          const restartLink = document.createElement('a');
+          restartLink.href = "file:///C:/Users/sana0/Desktop/webgame/gamestart.html";
+          restartLink.classList.add('restart');
+          restartLink.textContent = 'Restart';
+          document.body.appendChild(restartLink);
+        }
+      });
+
+      if (frames % 50 === 0) {
+        const enemy = new Box({
+          width: 3, height: 5, depth: 2,
+          velocity: { x: 0, y: 0, z: 0.006},
+          position: { x: (Math.random() - 0.5) * 30, y: 0, z: -20 },
+          color: 'black',
+          zAcceleration: true
+        });
+        enemy.castShadow = true;
+        scene.add(enemy);
+        enemies.push(enemy);
+      }
+
+      frames += 1;
+    }
+
+    animate();
+
+    const backgroundMusic = document.getElementById('background-music');
+    const startMusic = () => {
+      backgroundMusic.play();
+      document.removeEventListener('click', startMusic);
+    };
+    document.addEventListener('click', startMusic);
+  </script>
+</body>
+</html>
+
